@@ -11,7 +11,7 @@ defmodule Fluor do
   end
 
   def to_slack(xmpp_room, xmpp_from, xmpp_text) do
-    IO.inspect Application.fetch_env!(:fluor, :mapping)
+    #IO.inspect Application.fetch_env!(:fluor, :mapping)
     room = Application.fetch_env!(:fluor, :mapping)[xmpp_room]
     message = "*#{xmpp_from}@c.j.r*: #{xmpp_text}"
 
@@ -19,11 +19,11 @@ defmodule Fluor do
   end
 
   def to_xmpp(slack_room, slack_from, slack_text) do
-    IO.inspect "here"
-    IO.inspect slack_room
-    IO.inspect slack_from
-    IO.inspect slack_text
-    IO.inspect Application.fetch_env!(:fluor, :mapping)[slack_room]
+    #IO.inspect "here"
+    #IO.inspect slack_room
+    #IO.inspect slack_from
+    #IO.inspect slack_text
+    #IO.inspect Application.fetch_env!(:fluor, :mapping)[slack_room]
     room = Application.fetch_env!(:fluor, :mapping)[slack_room]
     message = "#{slack_from}@slack: #{slack_text}"
 

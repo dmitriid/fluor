@@ -47,14 +47,14 @@ defmodule Fluor.XMPP do
   end
 
   def handle_cast({:message, msg, room}, state) do
-    IO.inspect "#{msg} in #{room}"
+    #IO.inspect "#{msg} in #{room}"
     Connection.send(state[:pid],
                     Stanza.groupchat(room, msg))
     {:noreply, state}
   end
 
   def handle_info(:connection_ready, state) do
-    IO.inspect "CONN READY"
+    #IO.inspect "CONN READY"
     Enum.each(
       state.opts[:rooms],
       fn room -> Connection.send(state.pid, Stanza.join(room, "fluor")) end
@@ -75,10 +75,10 @@ defmodule Fluor.XMPP do
       true -> :ok
       false ->
         #IO.inspect msg
-        IO.inspect msg.from.resource
-        IO.inspect msg.body
+        #IO.inspect msg.from.resource
+        #IO.inspect msg.body
         room = msg.from.full |> String.split("/") |> List.first
-        IO.inspect room
+        #IO.inspect room
         Fluor.to_slack(room, msg.from.resource, msg.body)
     end
     {:noreply, state}
