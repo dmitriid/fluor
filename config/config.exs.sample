@@ -1,0 +1,13 @@
+use Mix.Config
+
+config :fluor,
+  slack_token: "you-slack-api-token",
+  jabber: [user: "your-jid",
+           password: "your-password",
+           rooms: ["list", "of", "rooms", "to", "join"]
+          ],
+  mapping: %{"some-slack-channel" => "jabber-room",
+             "jabber-room" => "some-slack-channel"}
+
+
+config :logger, level: :info
