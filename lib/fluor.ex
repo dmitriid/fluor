@@ -11,19 +11,24 @@ defmodule Fluor do
   end
 
   def to_slack(xmpp_room, xmpp_from, xmpp_text) do
-    room = Application.fetch_env!(:fluor, :mapping)[xmpp_room]
-    message = "*#{xmpp_from}@c.j.r*: #{xmpp_text}"
+    case get_room(xmpp_room) do
+      nil -> :noop
+      room ->
+        message = "*#{xmpp_from}@c.j.r*: #{xmpp_text}"
 
-    send retrieve(:slack), {:say, message, room}
+        send retrieve(:slack), {:say, message, room}
+    end
   end
 
   def to_xmpp(slack_room, slack_from, slack_text) do
-    room = Application.fetch_env!(:fluor, :mapping)[slack_room]
-    message = "#{slack_from}@slack: #{slack_text}"
+    case get_room(slack_room) do
+      nil -> :noop
+      room ->
+        message = "#{slack_from}@slack: #{slack_text}"
 
-    Fluor.XMPP.message retrieve(:xmpp), message, room
+        Fluor.XMPP.message retrieve(:xmpp), message, room
+    end
   end
-
 
   defp update(key, value) do
     Agent.update(__MODULE__, &Map.put(&1, key, value))
@@ -31,5 +36,9 @@ defmodule Fluor do
 
   defp retrieve(key) do
     Agent.get(__MODULE__, &Map.get(&1, key))
+  end
+
+  defp get_room(room) do
+    Application.fetch_env!(:fluor, :mapping)[room]
   end
 end

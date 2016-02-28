@@ -6,7 +6,7 @@ defmodule Fluor.XMPP do
   alias Romeo.Stanza
 
   def start(opts) do
-    GenServer.start(__MODULE__, opts, [])
+     GenServer.start(__MODULE__, opts, [])
   end
 
   def stop(pid) do
@@ -19,7 +19,7 @@ defmodule Fluor.XMPP do
   end
 
   def message(pid, msg, room) do
-    GenServer.cast(pid, {:message, msg, room})
+     GenServer.cast(pid, {:message, msg, room})
   end
 
   # Callbacks
