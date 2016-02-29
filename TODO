@@ -5,8 +5,10 @@
 
 - parse Slack messages:
   - <url> -> url
-  - :emoticon: -> smiley/unicode emoji
+  - DONE :emoticon: -> smiley/unicode emoji
   - &html_entitites; -> proper chars
+  - <@slack id> -> username
+  - <#slack_id> -> channel name
 
 - allow other messages, esp. form bots:
   - other bot messages (giphy, rightgif)
