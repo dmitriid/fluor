@@ -13,7 +13,11 @@ defmodule Fluor.Slack do
           case slack.channels[message.channel] do
             nil -> :noop
             channel ->
-              case slack.users[message.user] do
+              user = case message[:user] do
+                       nil -> ""
+                       u -> u
+                     end
+              case slack.users[user] do
                 nil -> :noop
                 user ->
                   case user.name do
