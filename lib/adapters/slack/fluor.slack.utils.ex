@@ -23,7 +23,7 @@ defmodule Fluor.Slack.Utils do
       [],
       fn emoji, acc ->
         to = case Exmoji.from_short_name emoji do
-               nil -> ":#{emoji}:"
+               nil -> parse_additional_emoji emoji
                actual_emoji -> Exmoji.unified_to_char actual_emoji.unified
              end
         IO.inspect emoji
@@ -31,4 +31,9 @@ defmodule Fluor.Slack.Utils do
       end
     )
   end
+
+  defp parse_additional_emoji("simple_smile"), do: ":)"
+  defp parse_additional_emoji("slightly_smiling_face"), do: ":|"
+  defp parse_additional_emoji(emoji), do: ":#{emoji}:"
+
 end
