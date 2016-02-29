@@ -60,7 +60,7 @@ defmodule Fluor.Slack.Utils do
                  [user_id|[]] ->
                    case users[user_id] do
                      nil -> "@#{user_id}"
-                     user -> user[:name]
+                     user -> user.name
                    end
                  [_|[nick]] -> nick
                end
