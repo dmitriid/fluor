@@ -1,8 +1,9 @@
 defmodule Fluor.Slack.Utils do
-  def sanitize(string) do
+  def sanitize(string, slack) do
     string
     |> replace_emoji
     |> html_entities
+    |> users(slack)
   end
 
   defp replace_emoji(string) do
@@ -44,5 +45,27 @@ defmodule Fluor.Slack.Utils do
     |> String.replace("&amp;", "&")
     |> String.replace("&lt;", "<")
     |> String.replace("&gt;", ">")
+  end
+
+  defp users(string, slack) do
+    in_string = Regex.scan(~r/<@([^>]+)>/,
+                           string,
+                           capture: :all_but_first) |> List.flatten
+    users = slack.users
+    List.foldl(
+      in_string,
+      string,
+      fn user_id_like, acc ->
+        user = case String.split(user_id_like, "|") do
+                 [user_id|[]] ->
+                   case users[user_id] do
+                     nil -> "@#{user_id}"
+                     user -> user[:name]
+                   end
+                 [_|[nick]] -> nick
+               end
+        String.replace acc, "<@#{user_id_like}>", user
+      end
+    )
   end
 end
