@@ -28,6 +28,9 @@ defmodule Fluor.Slack do
     rescue
       e in _ ->
         Logger.info "Failed in Slack.handle_message with #{e.message}"
+    catch
+      e ->
+        IO.inspect e
     end
     {:ok, state}
   end
@@ -46,6 +49,9 @@ defmodule Fluor.Slack do
     rescue
       e in _ ->
         Logger.info "Failed in Slack.:say with #{e.message}"
+    catch
+      e ->
+        IO.inspect e
     end
     {:ok, state}
   end
