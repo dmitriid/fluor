@@ -27,7 +27,8 @@ defmodule Fluor.XMPP do
   def init(opts) do
     {:ok, pid} = Connection.start_link([jid: opts[:user],
                                         password: opts[:password],
-                                        nickname: "fluor"
+                                        nickname: "#{opts[:resource]}@fluor",
+                                        resource: opts[:resource]
                                        ])
     {:ok, %{:pid => pid, :opts => opts}}
   end

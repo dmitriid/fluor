@@ -3,6 +3,7 @@ defmodule Fluor.Slack do
   require Logger
 
   def handle_connect(slack, state) do
+    Enum.each(slack.users, fn {_, %{name: name}} -> Fluor.add_slack_user(name) end)
     {:ok, state}
   end
 
@@ -35,6 +36,23 @@ defmodule Fluor.Slack do
     catch
       e ->
         IO.inspect e
+    end
+    {:ok, state}
+  end
+  def handle_message(%{type: "presence_change",
+                       user: user,
+                       presence: presence}, slack, state) do
+    try do
+      case slack.users[user] do
+        nil -> :noop
+        u ->
+          case presence do
+            "active" -> Fluor.add_slack_user(u.name)
+            "away" -> Fluor.remove_slack_user(u.name)
+          end
+      end
+    catch
+      e -> IO.inspect e
     end
     {:ok, state}
   end
