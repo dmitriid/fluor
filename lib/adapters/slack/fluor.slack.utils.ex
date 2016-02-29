@@ -1,6 +1,8 @@
 defmodule Fluor.Slack.Utils do
   def sanitize(string) do
-    string |> replace_emoji
+    string
+    |> replace_emoji
+    |> html_entities
   end
 
   defp replace_emoji(string) do
@@ -36,4 +38,11 @@ defmodule Fluor.Slack.Utils do
   defp parse_additional_emoji("slightly_smiling_face"), do: ":|"
   defp parse_additional_emoji(emoji), do: ":#{emoji}:"
 
+
+  defp html_entities(string) do
+    string
+    |> String.replace("&amp;", "&")
+    |> String.replace("&lt;", "<")
+    |> String.replace("&gtp", ">")
+  end
 end

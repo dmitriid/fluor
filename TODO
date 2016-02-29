@@ -6,7 +6,7 @@
 - parse Slack messages:
   - <url> -> url
   - DONE :emoticon: -> smiley/unicode emoji
-  - &html_entitites; -> proper chars
+  - DONE &html_entitites; -> proper chars
   - <@slack id> -> username
   - <#slack_id> -> channel name
 
