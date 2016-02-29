@@ -4,6 +4,7 @@ defmodule Fluor.Slack.Utils do
     |> replace_emoji
     |> html_entities
     |> users(slack)
+    |> channels(slack)
   end
 
   defp replace_emoji(string) do
@@ -65,6 +66,28 @@ defmodule Fluor.Slack.Utils do
                  [_|[nick]] -> nick
                end
         String.replace acc, "<@#{user_id_like}>", user
+      end
+    )
+  end
+
+  defp channels(string, slack) do
+    in_string = Regex.scan(~r/<#([^>]+)>/,
+                           string,
+                           capture: :all_but_first) |> List.flatten
+    channels = slack.channels
+    List.foldl(
+      in_string,
+      string,
+      fn channel_id_like, acc ->
+        channel = case String.split(channel_id_like, "|") do
+                    [channel_id|[]] ->
+                      case channels[channel_id] do
+                        nil -> "@#{channel_id}"
+                        user -> channel.name
+                      end
+                    [_|[chan]] -> chan
+                  end
+        String.replace acc, "<###{channel_id_like}>", channel
       end
     )
   end

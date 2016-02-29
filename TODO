@@ -7,8 +7,8 @@
   - <url> -> url
   - DONE :emoticon: -> smiley/unicode emoji
   - DONE &html_entitites; -> proper chars
-  - <@slack id> -> username
-  - <#slack_id> -> channel name
+  - DONE <@slack id> -> username
+  - DONE <#slack_id> -> channel name
 
 - allow other messages, esp. form bots:
   - other bot messages (giphy, rightgif)
