@@ -1,0 +1,16 @@
+- for each Slack presence message: login user to XMPP with
+  [jid: flour_jid, nickname: slack_nickname, resource: nickname@slack]
+
+  - send corresponding messages from corresponding instances
+
+- parse Slack messages:
+  - <url> -> url
+  - :emoticon: -> smiley/unicode emoji
+
+- allow other messages, esp. form bots:
+  - other bot messages (giphy, rightgif)
+  - uri previews (? if sent by system)
+
+- lager
+  - log debug info?
+ 
