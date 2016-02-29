@@ -32,6 +32,7 @@ defmodule Fluor.Mixfile do
       websocket_client: [github: "jeremyong/websocket_client"],
       romeo: "~> 0.4.0",
       exml: [github: "esl/exml"]
+      exmoji: "~> 0.2.2"
     ]
   end
 end

@@ -23,7 +23,7 @@ defmodule Fluor.Slack do
                   case user.name do
                     "fluor" -> :noop
                     name ->
-                      Fluor.to_xmpp channel.name, name, message.text
+                      Fluor.to_xmpp channel.name, name, Slack.Utils.sanitize(message.text)
                   end
               end
           end
