@@ -43,6 +43,6 @@ defmodule Fluor.Slack.Utils do
     string
     |> String.replace("&amp;", "&")
     |> String.replace("&lt;", "<")
-    |> String.replace("&gtp", ">")
+    |> String.replace("&gt;", ">")
   end
 end
