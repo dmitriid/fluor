@@ -37,7 +37,7 @@ defmodule Fluor.XMPP do
     {:stop, :normal, :ok, state}
   end
 
-  def handle_cast({:say, msg, room}, state) do
+  def handle_cast({:message, msg, room}, state) do
     Connection.send(state[:pid],
                     Stanza.groupchat(room, msg))
     {:noreply, state}
