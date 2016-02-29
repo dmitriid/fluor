@@ -87,7 +87,7 @@ defmodule Fluor.Slack.Utils do
                       end
                     [_|[chan]] -> chan
                   end
-        String.replace acc, "<###{channel_id_like}>", channel
+        String.replace acc, "<###{channel}>", channel
       end
     )
   end
