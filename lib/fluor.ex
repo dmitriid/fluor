@@ -15,7 +15,6 @@ defmodule Fluor do
       nil -> :noop
       room ->
         message = "*#{xmpp_from}@c.j.r*: #{xmpp_text}"
-
         send retrieve(:slack), {:say, message, room}
     end
   end
@@ -24,9 +23,7 @@ defmodule Fluor do
     case get_room(slack_room) do
       nil -> :noop
       room ->
-        message = "#{slack_from}@slack: #{slack_text}"
-
-        Fluor.XMPP.message get_or_login_xmpp(slack_from), message, room
+        Fluor.XMPP.message get_or_login_xmpp(slack_from), slack_text, room
     end
   end
 

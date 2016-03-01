@@ -3,7 +3,7 @@ defmodule Fluor.Slack do
   require Logger
 
   def handle_connect(slack, state) do
-    Enum.each(slack.users, fn {_, %{name: name}} -> Fluor.add_slack_user(name) end)
+    # Enum.each(slack.users, fn {_, %{name: name}} -> Fluor.add_slack_user(name) end)
     {:ok, state}
   end
 
