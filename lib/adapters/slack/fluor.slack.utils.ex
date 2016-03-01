@@ -19,7 +19,7 @@ defmodule Fluor.Slack.Utils do
 
   defp list_emojis(string) do
 
-    in_string = Regex.scan(~r/:([^:]+):/,
+    in_string = Regex.scan(~r/:([a-z_]+):/,
                            string,
                            capture: :all_but_first) |> List.flatten
     List.foldl(
@@ -37,7 +37,7 @@ defmodule Fluor.Slack.Utils do
   end
 
   defp parse_additional_emoji("simple_smile"), do: ":)"
-  defp parse_additional_emoji("slightly_smiling_face"), do: ":|"
+  defp parse_additional_emoji("slightly_smiling_face"), do: Exmoji.unified_to_char "1F642"
   defp parse_additional_emoji(emoji), do: ":#{emoji}:"
 
 
