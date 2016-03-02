@@ -9,8 +9,18 @@ defmodule Fluor.Slack do
 
   def handle_message(message = %{type: "message"}, slack, state) do
     try do
-      case :sub_type in message do
-        false ->
+      atts = case message[:attachment] do
+               nil ->
+                 case not(message[:message] == nil) and not(message[:message][:attachments] == nil) do
+                   true ->
+                     message[:message][:attachments]
+                   false ->
+                     nil
+                 end
+               _ -> message[:attachments]
+             end
+      case atts do
+        nil ->
           case slack.channels[message.channel] do
             nil -> :noop
             channel ->
@@ -28,13 +38,35 @@ defmodule Fluor.Slack do
                   end
               end
           end
-        true ->
-          case message[:message] do
-            %{:attachments => attch} ->
-              as = Enum.filter attch, fn %{:text => txt} -> not txt == nil end
-            Enum.each as, fn %{:text => text} ->
-              Fluor.to_xmpp slack.channels[message.channel], "fluor", Fluor.Slack.Utils.sanitize(text) end
-          end
+        _ ->
+          atts |> Enum.each(fn att ->
+            text = att[:text]
+            title = att[:title]
+            img = att[:image_url]
+
+            msg = case text == nil and title == nil do
+                    true ->
+                      case img == nil do
+                        true -> nil
+                        false -> img
+                      end
+                    false ->
+                      txt = case text == nil do
+                              true -> ""
+                              false -> text
+                            end
+                      ttl = case title == nil do
+                              true -> ""
+                              false -> title
+                            end
+                      "#{txt} #{ttl}"
+                  end
+            Fluor.to_xmpp(
+              slack.channels[message.channel],
+              "fluor",
+              Fluor.Slack.Utils.sanitize(msg, slack)
+            )
+          end)
       end
     rescue
       e in _ ->
