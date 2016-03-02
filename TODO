@@ -1,10 +1,10 @@
-- for each Slack presence message: login user to XMPP with
+- DONE for each Slack presence message: login user to XMPP with
   [jid: flour_jid, nickname: slack_nickname, resource: nickname@slack]
 
-  - send corresponding messages from corresponding instances
+  - DONE send corresponding messages from corresponding instances
 
 - parse Slack messages:
-  - <url> -> url
+  - DONE <url> -> url
   - DONE :emoticon: -> smiley/unicode emoji
   - DONE &html_entitites; -> proper chars
   - DONE <@slack id> -> username

@@ -5,6 +5,7 @@ defmodule Fluor.Slack.Utils do
     |> html_entities
     |> users(slack)
     |> channels(slack)
+    |> uris
   end
 
   defp replace_emoji(string) do
@@ -88,6 +89,23 @@ defmodule Fluor.Slack.Utils do
                     [_|[chan]] -> chan
                   end
         String.replace acc, "<##{channel_id_like}>", channel
+      end
+    )
+  end
+
+  defp uris(string) do
+    uris = Regex.scan(~r/<(mailto:|http(s)?)([^>]+)>/,
+                      string)
+    |> List.flatten
+    |> Enum.filter(fn x -> String.first(x) == "<" end)
+    |> Enum.map(fn x -> x |> String.replace("<", "") end)
+    |> Enum.map(fn x -> x |> String.replace(">", "") end)
+
+    List.foldl(
+      uris,
+      string,
+      fn uri, acc ->
+        acc |> String.replace("<#{uri}>", uri |> String.replace("mailto:", ""))
       end
     )
   end
