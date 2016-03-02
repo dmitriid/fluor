@@ -48,7 +48,11 @@ defmodule Fluor.Slack do
                     true ->
                       case img == nil do
                         true -> nil
-                        false -> img
+                        false ->
+                          case message[:sub_type] == "message_changed" do
+                            true -> :nil
+                            false -> img
+                          end
                       end
                     false ->
                       txt = case text == nil do
@@ -61,11 +65,15 @@ defmodule Fluor.Slack do
                             end
                       "#{ttl} | #{txt}"
                   end
-            Fluor.to_xmpp(
-              slack.channels[message.channel].name,
-              "fluor",
-              Fluor.Slack.Utils.sanitize(msg, slack)
-            )
+            case msg do
+              nil -> :noop
+              _ ->
+                Fluor.to_xmpp(
+                  slack.channels[message.channel].name,
+                  "fluor",
+                  Fluor.Slack.Utils.sanitize(msg, slack)
+                )
+            end
           end)
       end
     rescue
