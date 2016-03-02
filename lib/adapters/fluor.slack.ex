@@ -8,6 +8,7 @@ defmodule Fluor.Slack do
   end
 
   def handle_message(message = %{type: "message"}, slack, state) do
+    IO.inspect message
     try do
       atts = case message[:attachments] do
                nil ->
@@ -49,7 +50,7 @@ defmodule Fluor.Slack do
                       case img == nil do
                         true -> nil
                         false ->
-                          case message[:sub_type] == "message_changed" do
+                          case message[:subtype] == "message_changed" do
                             true -> :nil
                             false -> img
                           end
