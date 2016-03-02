@@ -28,7 +28,13 @@ defmodule Fluor.Slack do
                   end
               end
           end
-        _ -> :noop
+        true ->
+          case message[:message] do
+            %{:attachments => attch} ->
+              as = Enum.filter attch, fn %{:text => txt} -> not txt == nil end
+            Enum.each as, fn %{:text => text} ->
+              Fluor.to_xmpp slack.channels[message.channel], "fluor", Fluor.Slack.Utils.sanitize(text) end
+          end
       end
     rescue
       e in _ ->
