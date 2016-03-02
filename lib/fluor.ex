@@ -35,8 +35,9 @@ defmodule Fluor do
     case retrieve({:xmpp, slack_from}) do
       nil -> :ok
       pid ->
-        Fluor.XMPP.stop(pid)
-        delete({:xmpp, slack_from})
+        :ok
+        #Fluor.XMPP.stop(pid)
+        #delete({:xmpp, slack_from})
     end
   end
 
