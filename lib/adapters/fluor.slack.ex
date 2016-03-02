@@ -59,7 +59,7 @@ defmodule Fluor.Slack do
                               true -> ""
                               false -> title
                             end
-                      "#{txt} #{ttl}"
+                      "#{ttl} | #{txt}"
                   end
             Fluor.to_xmpp(
               slack.channels[message.channel].name,
