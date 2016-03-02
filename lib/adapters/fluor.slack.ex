@@ -9,7 +9,7 @@ defmodule Fluor.Slack do
 
   def handle_message(message = %{type: "message"}, slack, state) do
     try do
-      atts = case message[:attachment] do
+      atts = case message[:attachments] do
                nil ->
                  case not(message[:message] == nil) and not(message[:message][:attachments] == nil) do
                    true ->
@@ -44,7 +44,7 @@ defmodule Fluor.Slack do
             title = att[:title]
             img = att[:image_url]
 
-            msg = case text == nil and title == nil do
+            msg = case text == nil do
                     true ->
                       case img == nil do
                         true -> nil
@@ -62,7 +62,7 @@ defmodule Fluor.Slack do
                       "#{txt} #{ttl}"
                   end
             Fluor.to_xmpp(
-              slack.channels[message.channel],
+              slack.channels[message.channel].name,
               "fluor",
               Fluor.Slack.Utils.sanitize(msg, slack)
             )
