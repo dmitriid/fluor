@@ -53,7 +53,7 @@ defmodule Fluor.Slack do
                     false ->
                       txt = case text == nil do
                               true -> ""
-                              false -> text
+                              false -> text |> String.slice(0, 100)
                             end
                       ttl = case title == nil do
                               true -> ""
