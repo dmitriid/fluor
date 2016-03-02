@@ -72,8 +72,7 @@ defmodule Fluor.XMPP do
     case msg.from.resource == "fluor" or
     msg.from.full in state.opts[:rooms] or
     String.contains?(msg.from.resource, "`") or
-    (state.opts[:resource] == "fluor")
-      do
+    not (msg.to.resource == "fluor") do
       true -> :ok
       false ->
         room = msg.from.full |> String.split("/") |> List.first
