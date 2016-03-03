@@ -14,7 +14,9 @@ defmodule Fluor.Mixfile do
   #
   # Type "mix help compile.app" for more information
   def application do
-    [applications: [:logger, :slack, :romeo, :exml]]
+    [applications: [:lager, :slack, :romeo, :exml],
+     erl_opts: [parse_transform: "lager_transform"]
+    ]
   end
 
   # Dependencies can be Hex packages:
@@ -32,7 +34,8 @@ defmodule Fluor.Mixfile do
       websocket_client: [github: "jeremyong/websocket_client"],
       romeo: "~> 0.4.0",
       exml: [github: "esl/exml"],
-      exmoji: "~> 0.2.2"
+      exmoji: "~> 0.2.2",
+      lager: [github: "basho/lager"]
     ]
   end
 end

@@ -2,8 +2,12 @@ defmodule Fluor.Slack do
   use Slack
   require Logger
 
-  def handle_connect(slack, state) do
+  def handle_connect(_slack, state) do
     # Enum.each(slack.users, fn {_, %{name: name}} -> Fluor.add_slack_user(name) end)
+    :lager.log(:debug, self,
+               "Slack connected",
+               []
+    )
     {:ok, state}
   end
 
@@ -79,16 +83,27 @@ defmodule Fluor.Slack do
       end
     rescue
       e in _ ->
-        Logger.info "Failed in Slack.handle_message with #{Exception.message e}"
+        :lager.log(:error, self,
+                   "Slack message outgoing. error: ~p",
+                   [e]
+        )
     catch
       e ->
-        IO.inspect e
+        :lager.log(:error, self,
+                   "Slack message outgoing. error: ~p",
+                   [e]
+        )
     end
     {:ok, state}
   end
   def handle_message(%{type: "presence_change",
                        user: user,
                        presence: presence}, slack, state) do
+    :lager.log(:debug, self,
+               "Slack presence change. user: ~p, presence: ~p",
+               [user, presence]
+    )
+
     try do
       case slack.users[user] do
         nil -> :noop
@@ -99,12 +114,20 @@ defmodule Fluor.Slack do
           end
       end
     catch
-      e -> IO.inspect e
+      e ->
+        :lager.log(:error, self,
+                   "Slack presence change. error: ~p",
+                   [e]
+        )
     end
     {:ok, state}
   end
 
-  def handle_message(_message, _slack, state) do
+  def handle_message(message, _slack, state) do
+    :lager.log(:debug, self,
+               "Slack other message. message: ~p",
+               [message]
+    )
     {:ok, state}
   end
 
@@ -124,6 +147,12 @@ defmodule Fluor.Slack do
     end
     {:ok, state}
   end
-  def handle_info(_message, _slack, state), do: {:ok, state}
+  def handle_info(message, _slack, state) do
+    :lager.log(:debug, self,
+               "Slack other info. info: ~p",
+               [message]
+    )
+    {:ok, state}
+  end
 
 end

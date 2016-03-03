@@ -11,6 +11,10 @@ defmodule Fluor do
   end
 
   def to_slack(xmpp_room, xmpp_from, xmpp_text) do
+    :lager.log(:info, self,
+               "room: ~p, from: ~p, text: ~p",
+               [xmpp_room, xmpp_from, xmpp_text]
+               )
     case get_room(xmpp_room) do
       nil -> :noop
       room ->
@@ -20,6 +24,10 @@ defmodule Fluor do
   end
 
   def to_xmpp(slack_room, slack_from, slack_text) do
+    :lager.log(:info, self,
+               "room: ~p, from: ~p, text: ~p",
+               [slack_room, slack_from, slack_text]
+               )
     case get_room(slack_room) do
       nil -> :noop
       room ->
@@ -32,6 +40,10 @@ defmodule Fluor do
   end
 
   def remove_slack_user(slack_from) do
+    :lager.log(:info, self,
+               "logged out slack handle ~p",
+               [slack_from]
+    )
     case retrieve({:xmpp, slack_from}) do
       nil -> :ok
       pid ->
@@ -51,8 +63,16 @@ defmodule Fluor do
   end
 
   def login_xmpp(slack_from) do
+    :lager.log(:info, self,
+               "logging to xmpp with slack handle: ~p",
+               [slack_from]
+               )
     opts = Application.fetch_env!(:fluor, :jabber)
     {:ok, xmpp} = Fluor.XMPP.start(opts ++ [resource: slack_from])
+    :lager.log(:info, self,
+               "logged in to xmpp with slack handle ~p, pid: ~p",
+               [slack_from, xmpp]
+    )
     update({:xmpp, slack_from}, xmpp)
     xmpp
   end

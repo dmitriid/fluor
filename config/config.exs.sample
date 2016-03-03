@@ -11,3 +11,27 @@ config :fluor,
 
 
 config :logger, level: :info
+
+config :lager,
+  log_root: 'fluor/logs/',
+  handlers: [
+    lager_console_backend: :error,
+    lager_file_backend: [file: 'error.log',
+                         level: :error,
+                         size: 10485760,
+                         date: '$D0',
+                         count: 5
+                        ],
+    lager_file_backend: [file: 'debug.log',
+                         level: :debug,
+                         size: 10485760,
+                         date: '$D0',
+                         count: 5
+                        ],
+    lager_file_backend: [file: 'console.log',
+                         level: :info,
+                         size: 10485760,
+                         date: '$D0',
+                         count: 5
+                        ]
+  ]

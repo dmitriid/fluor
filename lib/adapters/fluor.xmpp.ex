@@ -34,23 +34,50 @@ defmodule Fluor.XMPP do
   end
 
   def handle_call(:stop, _from, state) do
+    :lager.log(:debug, self,
+               "XMPP stoped. pid: ~p, resource: ~p",
+               [state[:pid], state[:opts][:resource]]
+    )
     Connection.close state[:pid]
     {:stop, :normal, :ok, state}
   end
 
   def handle_cast({:message, msg, room}, state = %{:messages => msgs}) do
+#    :lager.log(:debug,
+#               "XMPP message outgoing: msg: ~p, room: ~p, state: ~p",
+#               [msg, room, state]
+#    )
     case state.connected do
       false -> {:noreply, %{state | :messages => msgs ++ [%{:text => msg, :room => room}]}}
       true ->
+#        :lager.log(:debug,
+#                   "XMPP message outgoing sent",
+#                   []
+#        )
         Connection.send(state[:pid], Stanza.groupchat(room, msg))
         {:noreply, state}
     end
   end
 
+  def handle_cast(other, state) do
+    :lager.log(:debug, self,
+               "XMPP got other cast. data: ~p, pid: ~p, resource: ~p",
+               [other. state[:pid], state[:opts][:resource]]
+    )
+  end
+
   def handle_info(:connection_ready, state = %{:messages => msgs}) do
+    :lager.log(:debug, self,
+               "XMPP connection ready. pid: ~p, resource: ~p",
+               [state[:pid], state[:opts][:resource]]
+    )
     Enum.each(
       state.opts[:rooms],
       fn room ->
+        :lager.log(:debug, self,
+                   "XMPP join room. room: ~p, pid: ~p, resource: ~p",
+                   [room, state[:pid], state[:opts][:resource]]
+        )
         Connection.send(state.pid,
                         Stanza.join(room, "#{state.opts[:resource]}`")
         )
@@ -69,6 +96,10 @@ defmodule Fluor.XMPP do
   end
 
   def handle_info({:stanza, %Stanza.Message{}=msg}, state) do
+#    :lager.log(:debug,
+#               "XMPP message incoming. state: ~p",
+#               [state]
+#    )
     case msg.from.resource == "fluor" or
     msg.from.full in state.opts[:rooms] or
     String.contains?(msg.from.resource, "`") or
@@ -81,7 +112,11 @@ defmodule Fluor.XMPP do
     {:noreply, state}
   end
 
-  def handle_info(_data, state) do
+  def handle_info(data, state) do
+    :lager.log(:debug, self,
+               "XMPP handle_info. data: ~p, pid: ~p, resource: ~p",
+               [data, state[:pid], state[:opts][:resource]]
+    )
     {:noreply, state}
   end
 end
