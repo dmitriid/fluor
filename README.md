@@ -1,3 +1,5 @@
+# DEPRECATED IN FAVOR OF [dmitriid/tetrad](https://github.com/dmitriid/tetrad)
+
 # Fluor
 
 The only integration in the world that properly integrates Slack and Jabber.
